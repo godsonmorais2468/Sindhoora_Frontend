@@ -1,0 +1,206 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Sindhoora design tokens
+   Black / ivory / champagne with restrained gold accents.
+   ========================================================================== */
+@theme {
+  /* Dark surfaces */
+  --color-ink-950: #050505;
+  --color-ink-900: #0a0a0a;
+  --color-ink-850: #111111;
+  --color-ink-800: #161616;
+  --color-ink-700: #1f1f1f;
+  --color-ink-600: #2a2a2a;
+
+  /* Gold — accents only. 600/700 are darker shades for text on light backgrounds (AA contrast). */
+  --color-gold-300: #e3c36a;
+  --color-gold-400: #d4af5a;
+  --color-gold-500: #c9a24d;
+  --color-gold-600: #a8842f;
+  --color-gold-700: #8a6a1f;
+  --color-champagne: #f0d99a;
+
+  /* Light surfaces */
+  --color-ivory: #f7f4ee;
+  --color-ivory-50: #faf8f3;
+  --color-sand: #efe9dc;
+  --color-line: #e6dfd0;
+
+  /* Text */
+  --color-cream: #f5f2ea;
+  --color-muted: #a8a39a;
+  --color-charcoal: #171717;
+  --color-taupe: #6b665d;
+
+  /* Status (admin) */
+  --color-success: #2f7a4f;
+  --color-warning: #a8670f;
+  --color-danger: #b23a3a;
+  --color-info: #2f5f8a;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-serif: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+
+  --breakpoint-xs: 25rem;
+
+  --ease-luxe: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-fade-up: fade-up 0.6s var(--ease-luxe) both;
+  --animate-fade-in: fade-in 0.4s ease-out both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 16px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-ink-950 font-sans text-[15px] leading-relaxed text-cream;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: rgb(201 162 77 / 0.35);
+    color: inherit;
+  }
+
+  /* Visible, on-brand keyboard focus everywhere. */
+  :focus-visible {
+    outline: 2px solid var(--color-gold-400);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+
+  img {
+    -webkit-user-drag: none;
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
+
+/* ==========================================================================
+   Components
+   ========================================================================== */
+@layer components {
+  .container-luxe {
+    @apply mx-auto w-full max-w-[1320px] px-4 sm:px-6 lg:px-10;
+  }
+
+  /* Small uppercase label above headings. */
+  .eyebrow {
+    @apply text-xs font-medium tracking-[0.22em] uppercase;
+  }
+
+  .heading-display {
+    @apply font-serif font-medium tracking-[-0.01em] leading-[1.05];
+  }
+
+  /* Thin gold rule used as a decorative divider. */
+  .gold-rule {
+    @apply h-px w-12 bg-linear-to-r from-gold-500 to-gold-500/0;
+  }
+
+  /* Hide scrollbars on horizontal carousels while keeping them scrollable. */
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Subtle, static gold glow behind dark hero areas (no animation, no blur filter). */
+  .gold-glow {
+    background-image: radial-gradient(60% 50% at 70% 40%, rgb(201 162 77 / 0.10), transparent 70%);
+  }
+
+  /* Image that fades in once decoded — opacity only. */
+  .img-fade {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+  }
+  .img-fade[data-loaded="true"] {
+    opacity: 1;
+  }
+
+  /* Lightweight skeleton — opacity pulse only. */
+  .skeleton {
+    @apply animate-pulse rounded-md bg-black/[0.06];
+  }
+  .skeleton-dark {
+    @apply animate-pulse rounded-md bg-white/[0.06];
+  }
+
+  .admin-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(0 0 0 / 0.15) transparent;
+  }
+}
+
+/* ==========================================================================
+   Splash shimmer — a soft champagne light passing over the logo.
+   The light is masked by the logo itself, so it only touches the gold.
+   ========================================================================== */
+.splash-shimmer {
+  -webkit-mask-image: url("/assets/branding/sindhoora-primary.webp");
+  mask-image: url("/assets/branding/sindhoora-primary.webp");
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+/* ==========================================================================
+   Reduced motion: keep the experience, drop the movement.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .motion-safe-scale {
+    transform: none !important;
+  }
+}
